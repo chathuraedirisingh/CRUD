@@ -2,8 +2,8 @@ package com.example.crud.dependancyinjection;
 
 import android.app.Application;
 
-import com.example.crud.ui.create.company.CreateCompanyFragment;
-import com.example.crud.ui.create.employee.CreateEmployeeFragment;
+import com.example.crud.ui.create.company.CreateCompanyDialog;
+import com.example.crud.ui.create.employee.CreateEmployeeDialog;
 import com.example.crud.ui.list.company.ListCompanyFragment;
 import com.example.crud.ui.list.employee.ListEmployeeFragment;
 import com.example.crud.ui.update.company.UpdateCompanyFragment;
@@ -18,11 +18,11 @@ import dagger.Component;
 public interface ApplicationComponent {
 
     void inject(ListEmployeeFragment listEmpFragment);
-    void inject(CreateEmployeeFragment createEmpFragment);
+    void inject(CreateEmployeeDialog createEmployeeDialog);
     void inject(UpdateEmployeeFragment detailEmpFragment);
 
     void inject(ListCompanyFragment listComFragment);
-    void inject(CreateCompanyFragment createComFragment);
+    void inject(CreateCompanyDialog createCompanyDialog);
     void inject(UpdateCompanyFragment detailComFragment);
 
     Application application();

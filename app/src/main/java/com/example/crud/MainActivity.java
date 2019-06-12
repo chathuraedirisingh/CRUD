@@ -1,55 +1,45 @@
 package com.example.crud;
 
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
+import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
-import android.view.View;
 import android.support.v4.view.GravityCompat;
-import android.support.v7.app.ActionBarDrawerToggle;
-import android.view.MenuItem;
-import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
-
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
+import android.view.MenuItem;
 
-import com.example.crud.ui.create.company.CreateCompanyFragment;
-import com.example.crud.ui.create.employee.CreateEmployeeFragment;
 import com.example.crud.ui.list.company.ListCompanyFragment;
 import com.example.crud.ui.list.employee.ListEmployeeFragment;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
+    Toolbar toolbar;
+    DrawerLayout drawer;
+    NavigationView navigationView;
+    ActionBarDrawerToggle toggle;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = findViewById(R.id.toolbar);
+
+        toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        DrawerLayout drawer = findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+        drawer = findViewById(R.id.drawer_layout);
+        navigationView = (NavigationView) findViewById(R.id.nav_view);
+        toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+
         drawer.addDrawerListener(toggle);
         toggle.syncState();
-
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-
         displaySelectedScreen(R.id.nav_home);
-
-//        FloatingActionButton fab = findViewById(R.id.fab);
-//        fab.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                displaySelectedScreen(3);
-//            }
-//        });
-
         navigationView.setNavigationItemSelectedListener(this);
     }
 
@@ -78,7 +68,8 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.nav_home) {
+            this.finish();
             return true;
         }
 
@@ -108,24 +99,21 @@ public class MainActivity extends AppCompatActivity
             case R.id.nav_gallery:
                 fragment = new ListCompanyFragment();
                 break;
-            case 3:
-                fragment = new CreateEmployeeFragment();
-                break;
-            case 4:
-                fragment = new CreateCompanyFragment();
-                break;
         }
+        goFragment(fragment);
+    }
 
-
-
+    public void goFragment(Fragment fragment){
         //replacing the fragment
         if (fragment != null) {
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
             ft.replace(R.id.content_frame, fragment);
             ft.commit();
         }
-
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
+
     }
+
+
 }

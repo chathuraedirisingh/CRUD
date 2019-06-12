@@ -6,6 +6,7 @@ import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Rect;
@@ -15,7 +16,6 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.DividerItemDecoration;
@@ -34,10 +34,9 @@ import android.widget.TextView;
 import com.example.crud.MyApp;
 import com.example.crud.R;
 import com.example.crud.data.db.entity.Employee;
-import com.example.crud.ui.create.employee.CreateEmployeeFragment;
+import com.example.crud.ui.create.employee.CreateEmployeeDialog;
 import com.example.crud.ui.details.employee.DetailEmployeeFragment;
 import com.example.crud.viewmodel.employee.ListEmployeeCollectionViewModel;
-import com.example.crud.viewmodel.employee.NewEmployeeViewModel;
 
 import java.util.List;
 
@@ -81,6 +80,8 @@ public class ListEmployeeFragment extends Fragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
+        getActivity().setTitle("List Employees");
+
         //Set up and subscribe (observe) to the ViewModel
         listEmployeeCollectionViewModel = ViewModelProviders.of(this, viewModelFactory)
                 .get(ListEmployeeCollectionViewModel.class);
@@ -101,26 +102,34 @@ public class ListEmployeeFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
 
         View v = inflater.inflate(R.layout.fragment_list_employee, container, false);
 
         recyclerView = (RecyclerView) v.findViewById(R.id.emp_list_frag_rec);
         layoutInflater = getActivity().getLayoutInflater();
 
-//        toolbar.setTitle(R.string.title_toolbar);
-//        toolbar.setLogo(R.drawable.ic_view_list_white_24dp);
-//        toolbar.setTitleMarginStart(72);
+        FloatingActionButton fab = (FloatingActionButton) v.findViewById(R.id.fab_create_employee);
 
-        FloatingActionButton fabulous = (FloatingActionButton) v.findViewById(R.id.fab_create_new_item);
-
-        fabulous.setOnClickListener(new View.OnClickListener() {
+        fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startCreateEmployee();
+                CreateEmployeeDialog myDialog = new CreateEmployeeDialog();
+                myDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                    @Override
+                    public void onDismiss(DialogInterface dialog) {
+                        System.out.println("NOTIFY");
+                        adapter.notifyDataSetChanged();
+
+                        ListEmployeeFragment fg = new ListEmployeeFragment();
+                        getFragmentManager()  // or getSupportFragmentManager() if your fragment is part of support library
+                                .beginTransaction()
+                                .replace(R.id.content_frame, fg)
+                                .commit();
+                    }
+                });
+                myDialog.show(getActivity().getSupportFragmentManager(),"MyDP");
             }
         });
-
         return v;
     }
 
@@ -163,17 +172,6 @@ public class ListEmployeeFragment extends Fragment {
         }
     }
 
-    public void startCreateEmployee() {
-//        Fragment fr = new CreateEmployeeFragment();
-//        FragmentManager fm = getFragmentManager();
-//        FragmentTransaction fragmentTransaction = fm.beginTransaction();
-//        fragmentTransaction.add(R.id.content_frame, fr);
-//        fragmentTransaction.commit();
-
-        FragmentManager manager = getFragmentManager();
-        manager.beginTransaction().replace(R.id.content_frame, new CreateEmployeeFragment()).commit();
-    }
-
 
     public void setListData(List<Employee> listOfData) {
         this.employees = listOfData;
@@ -186,21 +184,21 @@ public class ListEmployeeFragment extends Fragment {
         recyclerView.setAdapter(adapter);
 
 
-        DividerItemDecoration itemDecoration = new DividerItemDecoration(
-                recyclerView.getContext(),
-                layoutManager.getOrientation()
-        );
-
-        itemDecoration.setDrawable(
-                ContextCompat.getDrawable(
-                        getActivity(),
-                        R.drawable.divider_white
-                )
-        );
-
-        recyclerView.addItemDecoration(
-                itemDecoration
-        );
+//        DividerItemDecoration itemDecoration = new DividerItemDecoration(
+//                recyclerView.getContext(),
+//                layoutManager.getOrientation()
+//        );
+//
+//        itemDecoration.setDrawable(
+//                ContextCompat.getDrawable(
+//                        getActivity(),
+//                        R.drawable.divider_white
+//                )
+//        );
+//
+//        recyclerView.addItemDecoration(
+//                itemDecoration
+//        );
 
 
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(createHelperCallback());

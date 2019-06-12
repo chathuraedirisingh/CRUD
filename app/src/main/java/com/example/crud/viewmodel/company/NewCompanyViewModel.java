@@ -22,6 +22,10 @@ public class NewCompanyViewModel extends ViewModel {
         new AddItemTask().execute(company);
     }
 
+    public void updateCompany(Company company){
+        repository.updateCompany(company);
+    }
+
     @SuppressLint("StaticFieldLeak")
     private class AddItemTask extends AsyncTask<Company, Void, Void> {
 

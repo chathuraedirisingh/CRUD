@@ -14,7 +14,7 @@ public class ListCompanyViewModel extends ViewModel {
         this.repository = repository;
     }
 
-    public LiveData<Company> getCompanyItemById(String itemId){
+    public Company getCompanyItemById(long itemId){
         return repository.getCompany(itemId);
     }
 

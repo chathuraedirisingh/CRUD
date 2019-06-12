@@ -39,7 +39,7 @@ public class Repository {
         employeeDao.insertEmployee(employee);
     }
 
-    public LiveData<Company> getCompany(String comId){ return companyDao.getCompanyById(comId); }
+    public Company getCompany(long comId){ return companyDao.getCompanyById(comId); }
 
     public LiveData<List<Company>> getCompanies(){
         return companyDao.getListCompanyData();
@@ -51,5 +51,9 @@ public class Repository {
 
     public void insertCompany(Company company){
         companyDao.insertCompany(company);
+    }
+
+    public void updateCompany(Company company) {
+        companyDao.updateCompany(company);
     }
 }

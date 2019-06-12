@@ -1,12 +1,13 @@
-package com.example.crud.ui.update.company;
+package com.example.crud.ui.create.company;
 
 
 import android.app.Dialog;
-import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Context;
 import android.content.DialogInterface;
-import android.net.Uri;
+import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -15,24 +16,22 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
 
 import com.example.crud.MyApp;
 import com.example.crud.R;
 import com.example.crud.data.db.entity.Company;
-import com.example.crud.ui.create.company.CreateCompanyDialog;
-import com.example.crud.viewmodel.company.ListCompanyViewModel;
 import com.example.crud.viewmodel.company.NewCompanyViewModel;
 import com.mvc.imagepicker.ImagePicker;
+import com.squareup.picasso.Picasso;
 
 import javax.inject.Inject;
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class UpdateCompanyFragment extends DialogFragment {
+public class CreateCompanyDialog extends DialogFragment {
 
     public static final int GALLERY_ONLY_REQ = 1212;
 
@@ -42,18 +41,21 @@ public class UpdateCompanyFragment extends DialogFragment {
     private EditText cweb;
     String pathFromGallery;
 
-    private Company company;
-
     public DialogInterface.OnDismissListener onDismissListener;
 
     @Inject
     ViewModelProvider.Factory viewModelFactory;
 
     NewCompanyViewModel newCompanyViewModel;
-    ListCompanyViewModel listCompanyViewModel;
-    public UpdateCompanyFragment() {
+
+    public CreateCompanyDialog() {
         // Required empty public constructor
     }
+
+    public void setOnDismissListener(DialogInterface.OnDismissListener onDismissListener) {
+        this.onDismissListener = onDismissListener;
+    }
+
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -73,14 +75,8 @@ public class UpdateCompanyFragment extends DialogFragment {
 
         newCompanyViewModel = ViewModelProviders.of(this, viewModelFactory).get(NewCompanyViewModel.class);
 
-        Bundle bundle = getArguments();
-        long id = Long.parseLong(bundle.getString("ID",""));
-
-        Company comp = listCompanyViewModel.getCompanyItemById(id);
-        setData(comp);
         LayoutInflater inflater = getActivity().getLayoutInflater();
-        View view = inflater.inflate(R.layout.fragment_update_company, null);
-
+        View view = inflater.inflate(R.layout.fragment_create_company, null);
 
         builder.setView(view)
                 .setTitle("Add New Company")
@@ -101,7 +97,7 @@ public class UpdateCompanyFragment extends DialogFragment {
 //                        listener.applyTexts(username, password);
 
                         Company company = new Company(name,email,path,web);
-                        newCompanyViewModel.updateCompany(company);
+                        newCompanyViewModel.addNewCompanyToDatabase(company);
 
                     }
                 });
@@ -111,23 +107,53 @@ public class UpdateCompanyFragment extends DialogFragment {
         cemail = view.findViewById(R.id.email);
         cweb = view.findViewById(R.id.web);
 
-        clogo.setImageURI(Uri.parse(company.getLogo()));
-        cname.setText(company.getName());
-        cemail.setText(company.getEmail());
-        cweb.setText(company.getUrl());
-
         clogo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ImagePicker.pickImageGalleryOnly(UpdateCompanyFragment.this, GALLERY_ONLY_REQ);
+                ImagePicker.pickImageGalleryOnly(CreateCompanyDialog.this, GALLERY_ONLY_REQ);
             }
         });
 
         return builder.create();
     }
 
-    private void setData(Company com) {
-        this.company = com;
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+
+        try {
+//            listener = (ExampleDialogListener) context;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(context.toString() +
+                    "must implement ExampleDialogListener");
+        }
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        switch (requestCode) {
+            case GALLERY_ONLY_REQ:
+//                String pathFromGallery = "file:///" + ImagePicker.getImagePathFromResult(getActivity(), requestCode,
+//                        resultCode, data);
+                pathFromGallery = ImagePicker.getImagePathFromResult(getActivity(),requestCode,resultCode,data);
+                System.out.println("img path "+pathFromGallery);
+                Picasso.with(getActivity()).load(pathFromGallery).into(clogo);
+                break;
+            default:
+                Bitmap bitmap = ImagePicker.getImageFromResult(getActivity(), requestCode, resultCode, data);
+                if (bitmap != null) {
+                    clogo.setImageBitmap(bitmap);
+                }
+        }
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    @Override
+    public void onDismiss(DialogInterface dialog) {
+        super.onDismiss(dialog);
+        if (onDismissListener != null) {
+            onDismissListener.onDismiss(dialog);
+        }
+    }
 }

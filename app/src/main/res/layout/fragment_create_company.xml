@@ -1,14 +1,76 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.create.company.CreateCompanyFragment">
-
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    android:scrollbars="none">
+    <LinearLayout
+        android:id="@+id/activity_add_task"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingLeft="@dimen/layout_padding_left_right"
+        android:paddingRight="@dimen/layout_padding_left_right">
 
-</FrameLayout>
+        <ImageView
+            android:id="@+id/image_view_1"
+            android:layout_width="300dp"
+            android:layout_height="0dp"
+            android:src="@android:drawable/ic_menu_gallery"
+            android:layout_marginTop="@dimen/layout_marging_top"
+            android:layout_weight="1"/>
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/layout_marging_top"
+            android:text="Company Name"
+            android:textColor="@color/colorBlack"
+            android:textStyle="bold" />
+        <EditText
+            android:id="@+id/company_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/text_size_normal"
+            android:layout_marginTop="@dimen/layout_marging_top"
+            android:inputType="text"
+            android:maxLines="1"
+            android:textColor="@color/colorBlack" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/layout_marging_top"
+            android:text="Email"
+            android:textColor="@color/colorBlack"
+            android:textStyle="bold" />
+        <EditText
+            android:id="@+id/email"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/text_size_normal"
+            android:layout_marginTop="@dimen/layout_marging_top"
+            android:inputType="textEmailAddress"
+            android:maxLines="1"
+            android:textColor="@color/colorBlack" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/layout_marging_top"
+            android:text="URL"
+            android:textColor="@color/colorBlack"
+            android:textStyle="bold" />
+        <EditText
+            android:id="@+id/web"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/text_size_normal"
+            android:layout_marginTop="@dimen/layout_marging_top"
+            android:inputType="textUri"
+            android:maxLines="1"
+            android:textColor="@color/colorBlack" />
+
+    </LinearLayout>
+</ScrollView>

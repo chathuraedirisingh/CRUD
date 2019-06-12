@@ -9,7 +9,7 @@ import android.support.annotation.NonNull;
 public class Company {
 
     @PrimaryKey(autoGenerate = true)
-    private Integer comId=0;
+    private long comId=0;
 
     private String name;
 
@@ -19,11 +19,23 @@ public class Company {
 
     private String url;
 
-    public Integer getComId() {
+    public Company(String name, String email, String logo, String url) {
+        this.name = name;
+        this.email = email;
+        this.logo = logo;
+        this.url = url;
+    }
+
+    public Company(long id,String name) {
+        this.comId = id;
+        this.name = name;
+    }
+
+    public long getComId() {
         return comId;
     }
 
-    public void setComId(Integer comId) {
+    public void setComId(long comId) {
         this.comId = comId;
     }
 
@@ -57,5 +69,10 @@ public class Company {
 
     public void setUrl(String url) {
         this.url = url;
+    }
+
+    @Override
+    public String toString() {
+        return this.name.toString();
     }
 }
