@@ -1,4 +1,4 @@
-package com.example.crud.dependancyinjection;
+package com.example.crud.di;
 
 import android.app.Application;
 

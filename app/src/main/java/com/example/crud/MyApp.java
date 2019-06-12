@@ -2,10 +2,10 @@ package com.example.crud;
 
 import android.app.Application;
 
-import com.example.crud.dependancyinjection.ApplicationComponent;
-import com.example.crud.dependancyinjection.ApplicationModule;
-import com.example.crud.dependancyinjection.DaggerApplicationComponent;
-import com.example.crud.dependancyinjection.RoomModule;
+import com.example.crud.di.ApplicationComponent;
+import com.example.crud.di.ApplicationModule;
+import com.example.crud.di.DaggerApplicationComponent;
+import com.example.crud.di.RoomModule;
 
 public class MyApp extends Application {
     private ApplicationComponent applicationComponent;

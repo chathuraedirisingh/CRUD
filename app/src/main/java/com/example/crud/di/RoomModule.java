@@ -1,10 +1,9 @@
-package com.example.crud.dependancyinjection;
+package com.example.crud.di;
 
 import android.app.Application;
 import android.arch.lifecycle.ViewModelProvider;
 import android.arch.persistence.room.Room;
 
-import com.example.crud.MyApp;
 import com.example.crud.data.db.AppDB;
 import com.example.crud.data.db.entity.CompanyDao;
 import com.example.crud.data.db.entity.EmployeeDao;
