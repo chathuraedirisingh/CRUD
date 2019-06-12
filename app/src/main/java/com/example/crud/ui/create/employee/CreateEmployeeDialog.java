@@ -16,6 +16,8 @@ import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Spannable;
+import android.text.SpannableString;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -34,8 +36,13 @@ import com.example.crud.data.db.entity.Company;
 import com.example.crud.viewmodel.company.ListCompanyCollectionViewModel;
 import com.example.crud.viewmodel.employee.NewEmployeeViewModel;
 
+import org.angmarch.views.NiceSpinner;
+import org.angmarch.views.OnSpinnerItemSelectedListener;
+import org.angmarch.views.SpinnerTextFormatter;
+
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -103,7 +110,7 @@ public class CreateEmployeeDialog extends DialogFragment {
         last_name = view.findViewById(R.id.lastname);
         email = view.findViewById(R.id.email);
         phone = view.findViewById(R.id.phone);
-        companySpinner = view.findViewById(R.id.spinner);
+        final NiceSpinner niceSpinner = (NiceSpinner)view.findViewById(R.id.nice_spinner);
 
         newEmployeeViewModel = ViewModelProviders.of(this, viewModelFactory).get(NewEmployeeViewModel.class);
 
@@ -142,50 +149,32 @@ public class CreateEmployeeDialog extends DialogFragment {
                 });
 
 
-        final ArrayAdapter<Company> adapter =
-                new ArrayAdapter<Company>(getContext(), android.R.layout.simple_spinner_dropdown_item, coms);
-        adapter.setDropDownViewResource( android.R.layout.simple_spinner_dropdown_item);
+//        final ArrayAdapter<Company> adapter =
+//                new ArrayAdapter<Company>(getContext(), android.R.layout.simple_spinner_dropdown_item, coms);
 
-        companySpinner.setAdapter(adapter);
+        List<Company> dataset = new ArrayList<>();
+        dataset=coms;
 
-        companySpinner.setOnItemSelectedListener(
-                new AdapterView.OnItemSelectedListener() {
-                    public void onItemSelected(
-                            AdapterView<?> parent, View view, int position, long id) {
-                        Company company = (Company) parent.getSelectedItem();
-                        System.out.println("Spinner1"+company.getComId());
-                    }
+        SpinnerTextFormatter textFormatter = new SpinnerTextFormatter<Company>() {
+            @Override
+            public Spannable format(Company company) {
+                return new SpannableString(company.getComId() + " " + company.getName());
+            }
+        };
+        niceSpinner.setSpinnerTextFormatter(textFormatter);
+        niceSpinner.setSelectedTextFormatter(textFormatter);
 
-                    @Override
-                    public void onNothingSelected(AdapterView<?> parent) {
+        niceSpinner.setOnSpinnerItemSelectedListener(new OnSpinnerItemSelectedListener() {
+            @Override
+            public void onItemSelected(NiceSpinner parent, View view, int position, long id) {
+                Company company = (Company) niceSpinner.getSelectedItem();
+                System.out.println("Spinner1"+company.getComId());
+            }
+        });
+        niceSpinner.attachDataSource(dataset);
 
-                    }
-
-                });
         return builder.create();
     }
-
-    public class SpinAdapter extends ArrayAdapter<Company> {
-        public SpinAdapter(Activity context, ArrayList<Company> comp) {
-           super(context, 0, comp);
-        }
-
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-
-            View listItemView = convertView;
-            if(listItemView == null) {
-                listItemView = LayoutInflater.from(getContext()).inflate(
-                        R.layout.listitems_layout, parent, false);
-            }
-            Company company = getItem(position);
-            TextView nameTextView = (TextView) listItemView.findViewById(R.id.name);
-            nameTextView.setText(company.getName());
-            return listItemView;
-        }
-
-    }
-
     private void setListData(List<Company> data) {
         this.companies=data;
     }
@@ -198,50 +187,5 @@ public class CreateEmployeeDialog extends DialogFragment {
         }
     }
 
-    public class SpinnerAdapter extends BaseAdapter {
-
-        Context context;
-        ArrayList<Company> conv;
-        private LayoutInflater inflater = null;
-
-        public SpinnerAdapter(Context context, List<Company> conv) {
-            // TODO Auto-generated constructor stub
-            this.context = context;
-//            this.conv = conv;
-            inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        }
-
-        @Override
-        public int getCount() {
-            // TODO Auto-generated method stub
-            return conv.size();
-        }
-
-        @Override
-        public Object getItem(int position) {
-            // TODO Auto-generated method stub
-            return conv.get(position);
-        }
-
-        @Override
-        public long getItemId(int position) {
-            // TODO Auto-generated method stub
-            return position;
-        }
-
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            // TODO Auto-generated method stub
-            Company company=conv.get(position);
-            View vi = convertView;
-            if (vi == null)
-                vi = inflater.inflate(R.layout.listitems_layout, null);
-//            TextView id = (TextView) vi.findViewById(R.id.idx);
-            TextView name = (TextView) vi.findViewById(R.id.name);
-//            id.setText((int) company.getComId());
-            name.setText(company.getName());
-            return vi;
-        }
-    }
 
 }
