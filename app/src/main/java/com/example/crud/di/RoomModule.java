@@ -25,7 +25,7 @@ public class RoomModule {
                 application,
                 AppDB.class,
                 "myApp.db"
-        ).build();
+        ).allowMainThreadQueries().build();
     }
 
     @Provides

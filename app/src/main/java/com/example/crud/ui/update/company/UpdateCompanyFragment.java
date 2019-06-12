@@ -72,9 +72,11 @@ public class UpdateCompanyFragment extends DialogFragment {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
         newCompanyViewModel = ViewModelProviders.of(this, viewModelFactory).get(NewCompanyViewModel.class);
+        listCompanyViewModel = ViewModelProviders.of(this, viewModelFactory).get(ListCompanyViewModel.class);
 
         Bundle bundle = getArguments();
-        long id = Long.parseLong(bundle.getString("ID",""));
+        int id = Integer.parseInt(bundle.getString("ID",""));
+        System.out.println("ID  "+id);
 
         Company comp = listCompanyViewModel.getCompanyItemById(id);
         setData(comp);

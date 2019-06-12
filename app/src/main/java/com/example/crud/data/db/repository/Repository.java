@@ -39,7 +39,7 @@ public class Repository {
         employeeDao.insertEmployee(employee);
     }
 
-    public Company getCompany(long comId){ return companyDao.getCompanyById(comId); }
+    public Company getCompany(int comId){ return companyDao.getCompanyById(comId); }
 
     public LiveData<List<Company>> getCompanies(){
         return companyDao.getListCompanyData();

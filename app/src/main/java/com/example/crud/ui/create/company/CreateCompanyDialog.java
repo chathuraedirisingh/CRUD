@@ -134,11 +134,8 @@ public class CreateCompanyDialog extends DialogFragment {
 
         switch (requestCode) {
             case GALLERY_ONLY_REQ:
-//                String pathFromGallery = "file:///" + ImagePicker.getImagePathFromResult(getActivity(), requestCode,
-//                        resultCode, data);
                 pathFromGallery = ImagePicker.getImagePathFromResult(getActivity(),requestCode,resultCode,data);
-                System.out.println("img path "+pathFromGallery);
-                Picasso.with(getActivity()).load(pathFromGallery).into(clogo);
+                Picasso.with(getContext()).load(pathFromGallery).into(clogo);
                 break;
             default:
                 Bitmap bitmap = ImagePicker.getImageFromResult(getActivity(), requestCode, resultCode, data);

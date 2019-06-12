@@ -16,8 +16,8 @@ public interface CompanyDao {
     @Query("SELECT * FROM company")
     LiveData<List<Company>> getListCompanyData();
 
-    @Query("SELECT * FROM company WHERE comId =:comId")
-    public  Company getCompanyById(long comId);
+    @Query("SELECT * FROM company WHERE comId =:id LIMIT 1")
+    Company getCompanyById(int id);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     Long insertCompany(Company company);
